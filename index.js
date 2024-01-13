@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require('path');
+const axios = require('axios');
 const app = express();
 require('dotenv').config();
 
@@ -7,7 +8,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-console.log({ OMDB_API_KEY })
+const { PORT, OMDB_API_KEY } = process.env;
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'movie-finder.html'));
@@ -20,6 +21,7 @@ app.post('/search', async (req, res) => {
     const omdbUrl = `http://www.omdbapi.com/?t=${encodeURIComponent(movieTitle)}&apikey=${OMDB_API_KEY}`;
     const response = await axios.get(omdbUrl);
     const movieData = response.data;
+    console.log({movieData});
 
     if (movieData.Response === 'True') {
       res.send(`
@@ -35,7 +37,6 @@ app.post('/search', async (req, res) => {
     res.status(500).send('Server Error! Unable to fetch movie data.');
   }
 });
-
 
 app.listen(PORT, () => {
   console.log(`Listening on port:${PORT}`);
