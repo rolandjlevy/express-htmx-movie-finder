@@ -21,6 +21,19 @@
         height: 50px;
         animation: spin 1s linear infinite;
       }
+      .movies {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      .movies > section {
+        max-width: 300px;
+      }
+      .movies > h2 {
+        overflow-wrap: break-word;
+        word-break: break-word;
+        text-overflow: ellipsis;
+      }
     </style>
     <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.min.js"></script>
   </head>
@@ -40,7 +53,7 @@
       <button type="submit">Search</button>
 
       <!-- Loading indicator -->
-      <div id="loading" style="display:none">
+      <div id="loading" style="display: none">
         <div class="spinner"></div>
       </div>
     </form>
