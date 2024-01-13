@@ -36,7 +36,7 @@ app.post('/search', async (req, res) => {
       const movies = movieData.Search.map((item) => getMovie(item)).join('');
       res.send(`<article class="movies">${movies}</article>`);
     } else {
-      res.send(`<p>No results found for "${movieTitle}".</p>`);
+      res.send(`<p>No results found for "${movieTitle}"</p>`);
     }
   } catch (error) {
     console.error('Error fetching movie data:', error.message);
