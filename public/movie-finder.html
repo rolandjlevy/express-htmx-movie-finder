@@ -4,6 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Movie Finder</title>
+    <style>
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .spinner {
+        border: 8px solid rgba(0, 0, 0, 0.1);
+        border-left-color: #000;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+      }
+    </style>
     <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.min.js"></script>
   </head>
   <body>
@@ -22,11 +40,8 @@
       <button type="submit">Search</button>
 
       <!-- Loading indicator -->
-      <div id="loading" style="display: none">
-        <img
-          src="https://loading.io/spinners/spinner/index.ajax-spinner-preloader.gif"
-          alt="Loading"
-        />
+      <div id="loading" style="display:none">
+        <div class="spinner"></div>
       </div>
     </form>
 

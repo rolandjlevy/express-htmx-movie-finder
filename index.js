@@ -21,7 +21,7 @@ app.post('/search', async (req, res) => {
     const omdbUrl = `http://www.omdbapi.com/?t=${encodeURIComponent(movieTitle)}&apikey=${OMDB_API_KEY}`;
     const response = await axios.get(omdbUrl);
     const movieData = response.data;
-    console.log({movieData});
+    // console.log({movieData});
 
     if (movieData.Response === 'True') {
       res.send(`
