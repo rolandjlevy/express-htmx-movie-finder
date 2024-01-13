@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Finder</title>
+    <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.min.js"></script>
+  </head>
+  <body>
+    <h1>Movie Finder</h1>
+
+    <!-- Form submission with htmx -->
+    <form
+      hx-post="/search"
+      hx-target="#result"
+      hx-swap="outerHTML"
+      hx-indicator="#loading"
+    >
+      <label for="movieTitle">Movie Title:</label>
+      <input type="text" id="movieTitle" name="movieTitle" required />
+
+      <button type="submit">Search</button>
+
+      <!-- Loading indicator -->
+      <div id="loading" style="display: none">
+        <img
+          src="https://loading.io/spinners/spinner/index.ajax-spinner-preloader.gif"
+          alt="Loading"
+        />
+      </div>
+    </form>
+
+    <!-- Display result after form submission -->
+    <div id="result"></div>
+  </body>
+</html>
