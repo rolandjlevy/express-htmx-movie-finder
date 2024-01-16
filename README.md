@@ -1,5 +1,8 @@
 # Express Htmx Movie Finder
 
+### Live demo hosted on Vercel
+- [Express Htmx Movie Finder Demo](https://express-htmx-movie-finder-sqzr8eaj3-rolandlevy.vercel.app/)
+
 ### View the project in VS Code Simple browser
 - Get the URL for the page - see PORTS in terminal
 - From command palette: Simple Browser: Show
