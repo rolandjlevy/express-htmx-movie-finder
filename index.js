@@ -1,9 +1,8 @@
 const express = require('express');
-require('dotenv').config();
-
 const path = require('path');
 const axios = require('axios');
 const app = express();
+require('dotenv').config();
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
@@ -28,8 +27,9 @@ const getMovie = (movie) => {
 
 app.post('/search', async (req, res) => {
   const { movieTitle } = req.body;
+  const encodedTitle = encodeURIComponent(movieTitle);
   try {
-    const omdbUrl = `http://www.omdbapi.com/?s=${encodeURIComponent(movieTitle)}&apikey=${OMDB_API_KEY}`;
+    const omdbUrl = `http://www.omdbapi.com/?s=${encodedTitle}&apikey=${OMDB_API_KEY}`;
     const response = await axios.get(omdbUrl);
     const movieData = response.data;
     if (movieData.Response === 'True') {
