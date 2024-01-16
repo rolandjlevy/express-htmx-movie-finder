@@ -1,7 +1,7 @@
 # Express / Htmx Movie Finder
 
 ### Live demo hosted on Vercel
-- [Movie Finder Demo](https://express-htmx-movie-finder-5tkfl9d83-rolandlevy.vercel.app/)
+- [Movie Finder Demo](https://express-htmx-movie-finder.vercel.app/)
 - [Using Express in Vercel](https://vercel.com/guides/using-express-with-vercel)
     
 ### View the project in VS Code Simple browser
