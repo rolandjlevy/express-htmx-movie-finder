@@ -11,7 +11,7 @@
 - 
 ### To edit and run a front-end project in a Codespace
 - Terminal > npm i -g http-server 
-- Terminal > http-server
+- Terminal > http-server -c-1
 - click 'Open in Browser'
 
 ### Links
