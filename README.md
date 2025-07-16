@@ -8,7 +8,7 @@
 - Get the URL for the page - see PORTS in terminal
 - From command palette: Simple Browser: Show
 - then paste in that URL
-- 
+  
 ### To edit and run a front-end project in a Codespace
 - Terminal > npm i -g http-server 
 - Terminal > http-server -c-1
