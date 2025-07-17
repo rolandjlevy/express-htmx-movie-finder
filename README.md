@@ -17,7 +17,9 @@ A simple movie finder using HTMX to post requests to API endpoints in express ap
 
 ### Links
 - [Htmx docs](https://htmx.org/docs)
-- [Htmx Example demo](https://letsusetech.com/the-awesome-things-you-can-do-with-htmx)
+- [Htmx examples](https://htmx.org/examples)
+- [Htmx server examples](https://htmx.org/server-examples)
+- [Awesome Htmx](https://github.com/rajasegar/awesome-htmx)
 - [About Codespaces](https://docs.github.com/en/codespaces/getting-started/quickstart)
 - [Express codepace example](https://github.com/github/codespaces-express/tree/main)
 - [Using Express in Vercel](https://vercel.com/guides/using-express-with-vercel)
