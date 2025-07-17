@@ -1,8 +1,9 @@
 # Express / Htmx Movie Finder
 
+A simple movie finder using HTMX to post requests to API endpoints in express app
+
 ### Live demo hosted on Vercel
 - [Movie Finder Demo](https://express-htmx-movie-finder.vercel.app/)
-- [Using Express in Vercel](https://vercel.com/guides/using-express-with-vercel)
     
 ### View the project in VS Code Simple browser
 - Get the URL for the page - see PORTS in terminal
@@ -15,7 +16,8 @@
 - click 'Open in Browser'
 
 ### Links
-- [About Codespaces](https://docs.github.com/en/codespaces/getting-started/quickstart)
-- [Express codepace example](https://github.com/github/codespaces-express/tree/main)
 - [Htmx docs](https://htmx.org/docs)
 - [Htmx Example demo](https://letsusetech.com/the-awesome-things-you-can-do-with-htmx)
+- [About Codespaces](https://docs.github.com/en/codespaces/getting-started/quickstart)
+- [Express codepace example](https://github.com/github/codespaces-express/tree/main)
+- [Using Express in Vercel](https://vercel.com/guides/using-express-with-vercel)
