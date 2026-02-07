@@ -10,10 +10,14 @@ A simple movie finder using HTMX to post requests to API endpoints in express ap
 - From command palette: Simple Browser: Show
 - then paste in that URL
   
-### To edit and run a front-end project in a Codespace
-- Terminal > npm i -g http-server 
-- Terminal > http-server -c-1
-- click 'Open in Browser'
+### To run this project in a Codespace
+
+- in the Terminal run:
+```bash
+npm i -g http-server 
+http-server -c-1
+```
+- then click 'Open in Browser'
 
 ### Links
 - [Htmx docs](https://htmx.org/docs)
