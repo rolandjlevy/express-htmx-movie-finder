@@ -15,32 +15,51 @@ app.get('/', (req, res) => {
 });
 
 const getMovie = (movie) => {
-  return `<section>
-    <h2>${movie.Title}, ${movie.Year}</h2>
-    <p>
+  return `
+    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
       <a href="https://www.imdb.com/title/${movie.imdbID}" target="_blank">
-        <img src="${movie.Poster}" alt="${movie.Title} Poster">
+        <img src="${movie.Poster}" alt="${movie.Title} Poster" class="w-full h-80 object-cover" />
       </a>
-    </p>
-  </section>`;
+      <div class="p-4">
+        <h3 class="text-lg font-semibold text-gray-800">${movie.Title}</h3>
+        <p class="text-gray-500">${movie.Year}</p>
+      </div>
+    </div>
+  `;
 };
 
 app.post('/search', async (req, res) => {
   const { movieTitle } = req.body;
   const encodedTitle = encodeURIComponent(movieTitle);
+
   try {
     const omdbUrl = `http://www.omdbapi.com/?s=${encodedTitle}&apikey=${OMDB_API_KEY}`;
     const response = await axios.get(omdbUrl);
     const movieData = response.data;
+
     if (movieData.Response === 'True') {
-      const movies = movieData.Search.map((item) => getMovie(item)).join('');
-      res.send(`<article class="movies">${movies}</article>`);
+      // const movies = movieData.Search.map((item) => getMovie(item)).join('');
+      const limitedMovies = movieData.Search.slice(0, 20);
+      const movies = limitedMovies.map((item) => getMovie(item)).join('');
+      res.send(`
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          ${movies}
+        </div>
+      `);
     } else {
-      res.send(`<p>No results found for "${movieTitle}"</p>`);
+      res.send(`
+        <p class="text-center text-gray-600 text-lg">
+          No results found for "<strong>${movieTitle}</strong>"
+        </p>
+      `);
     }
   } catch (error) {
     console.error('Error fetching movie data:', error.message);
-    res.status(500).send('Server Error! Unable to fetch movie data.');
+    res.status(500).send(`
+      <p class="text-red-600 text-center font-semibold">
+        Server Error! Unable to fetch movie data.
+      </p>
+    `);
   }
 });
 
