@@ -4,8 +4,19 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        primary: '#006FEE',
-        secondary: '#7828C8'
+        primary: '#6366F1', // Indigo 500
+        'primary-dark': '#4F46E5', // Indigo 600
+
+        secondary: '#A855F7', // Purple 500
+        'secondary-dark': '#9333EA', // Purple 600
+
+        accent: '#14B8A6', // Teal 500
+
+        'surface-light': '#FFFFFF',
+        'surface-dark': '#1F2937', // Gray 800
+
+        'border-light': '#E5E7EB',
+        'border-dark': '#374151'
       }
     }
   },
@@ -13,8 +24,8 @@ tailwind.config = {
     function ({ addBase }) {
       addBase({
         ':root': {
-          '--nextui-primary': '#006FEE',
-          '--nextui-secondary': '#7828C8'
+          '--nextui-primary': '#6366F1',
+          '--nextui-secondary': '#A855F7'
         }
       });
     }

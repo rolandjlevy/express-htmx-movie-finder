@@ -57,3 +57,15 @@ randomBtn.addEventListener('click', () => {
 
 // Auto-update footer year
 document.getElementById('year').textContent = new Date().getFullYear();
+
+// Activate Lucide Icons
+document.addEventListener('DOMContentLoaded', () => {
+  // eslint-disable-next-line no-undef
+  lucide.createIcons();
+});
+
+// Re-activate icons after HTMX content swap
+document.body.addEventListener('htmx:afterSwap', () => {
+  // eslint-disable-next-line no-undef
+  lucide.createIcons();
+});

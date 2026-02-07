@@ -14,29 +14,109 @@
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.min.js"></script>
 
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎬%3C/text%3E%3C/svg%3E"
     />
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- Prism CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.min.css"
+    />
+
+    <!-- Prism JS -->
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-markup.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-javascript.min.js"></script>
   </head>
 
   <body class="bg-gray-100 dark:bg-gray-900 min-h-screen p-6 transition-colors">
     <div class="max-w-4xl mx-auto">
-      <!-- Header with Dark Mode Toggle -->
-      <div class="flex justify-between items-center mb-8">
+      <!-- Header Row -->
+      <div class="flex justify-between items-center mb-4">
         <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-100">
           Movie Finder 🎬
         </h1>
-
-        <!-- Toggle Button -->
+        <!-- Dark Mode Toggle -->
         <button
           id="themeToggle"
-          class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-medium shadow hover:opacity-80 transition"
+          class="flex items-center gap-2 px-4 py-2 rounded-lg shadow bg-surface-light text-gray-800 dark:bg-primary-dark dark:text-white font-medium hover:opacity-80 transition"
         >
-          🌙 Dark Mode
+          <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+          <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+          <span class="dark:hidden">Dark Mode</span>
+          <span class="hidden dark:inline">Light Mode</span>
         </button>
       </div>
 
+      <!-- About Section -->
+      <p
+        class="mb-4 text-gray-700 dark:text-gray-300 max-w-4xl leading-relaxed flex items-start gap-3"
+      >
+        <span>
+          This project is a focused exploration of building fast, elegant
+          interfaces with
+          <a
+            href="https://htmx.org/docs"
+            target="_blank"
+            rel="noopener"
+            class="text-primary hover:underline"
+          >
+            HTMX </a
+          >, a lightweight library that brings modern, server‑driven interaction
+          patterns to traditional HTML. It’s a simple demonstration of how far
+          you can push clean, minimal‑JavaScript architecture while still
+          delivering a responsive, intuitive user experience. The app works by
+          sending small, targeted requests to the server and swapping only the
+          returned HTML fragments into the page — no full reloads, no
+          client‑side framework, just simple, HTML‑driven interactions.
+        </span>
+      </p>
+      <details
+        class="group mb-4 bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-lg p-4 shadow-sm"
+      >
+        <summary
+          class="cursor-pointer flex items-center justify-between text-gray-800 dark:text-gray-100 font-medium"
+        >
+          <span>Show example HTMX request</span>
+          <i
+            data-lucide="chevron-down"
+            class="w-5 h-5 transition-transform group-open:rotate-180"
+          ></i>
+        </summary>
+
+        <!-- Animated container -->
+        <div class="details-content mt-4">
+          <pre class="rounded-lg overflow-x-auto">
+<code class="language-html text-xs">&lt;form
+  hx-post="/search"
+  hx-target="#result"
+  hx-swap="innerHTML"
+&gt;
+  &lt;input type="text" name="movieTitle" placeholder="Search for a movie…" /&gt;
+&lt;/form&gt;
+
+&lt;div id="result"&gt;&lt;/div&gt;</code>
+            </pre>
+          <pre class="mt-4 rounded-lg overflow-x-auto">
+<code class="language-javascript text-xs">app.post("/search", async (req, res) =&gt; {
+  const movies = await fetchMovies(req.body.movieTitle);
+  res.send(renderMovieList(movies)); // HTMX swaps this into #result
+});</code>
+    </pre>
+        </div>
+      </details>
       <form
         hx-post="/search"
         hx-target="#result"
@@ -44,12 +124,6 @@
         hx-indicator="#spinner"
         class="space-y-4 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md transition-colors"
       >
-        <label
-          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-        >
-          Movie Title
-        </label>
-
         <div class="relative">
           <input
             type="text"
@@ -68,81 +142,41 @@
           </div>
         </div>
 
+        <!-- Buttons -->
         <div class="flex gap-3 pt-2">
-          <!-- Search -->
+          <!-- Search (Primary) -->
           <button
             type="submit"
-            class="flex items-center gap-2 px-4 py-2 rounded-lg shadow bg-primary text-white font-medium hover:opacity-80 transition"
+            class="flex items-center gap-2 px-4 py-2 rounded-lg shadow bg-primary hover:bg-primary-dark text-white font-medium transition"
           >
-            <!-- Magnifying glass icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18a7.5 7.5 0 006.15-3.35z"
-              />
-            </svg>
+            <i data-lucide="search" class="w-5 h-5"></i>
             Search
           </button>
 
-          <!-- Clear -->
+          <!-- Random (Secondary) -->
+          <button
+            type="button"
+            id="randomBtn"
+            class="flex items-center gap-2 px-4 py-2 rounded-lg shadow bg-secondary hover:bg-secondary-dark text-white font-medium transition"
+          >
+            <i data-lucide="dice-5" class="w-5 h-5"></i>
+            Random
+          </button>
+
+          <!-- Clear (Neutral) -->
           <button
             type="button"
             id="clearBtn"
             class="flex items-center gap-2 px-4 py-2 rounded-lg shadow bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-medium hover:opacity-80 transition"
           >
-            <!-- X icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            <i data-lucide="x" class="w-5 h-5"></i>
             Clear
-          </button>
-
-          <!-- Random -->
-          <button
-            type="button"
-            id="randomBtn"
-            class="flex items-center gap-2 px-4 py-2 rounded-lg shadow bg-secondary text-white font-medium hover:opacity-80 transition"
-          >
-            <!-- Dice icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M4 4h7v7H4V4zm9 9h7v7h-7v-7zM4 13h7v7H4v-7zm9-9h7v7h-7V4z"
-              />
-            </svg>
-            Random
           </button>
         </div>
       </form>
 
       <div id="result" class="mt-8"></div>
+
       <!-- Footer -->
       <footer
         class="mt-16 text-center text-gray-600 dark:text-gray-400 text-sm py-6 border-t border-gray-300 dark:border-gray-700"
@@ -152,14 +186,15 @@
           href="https://rolandlevy.co.uk"
           target="_blank"
           rel="noopener"
-          class="text-primary dark:text-primary hover:underline ml-1"
+          class="inline-flex items-center gap-1 text-primary dark:text-primary hover:underline ml-1"
         >
           see more of my projects
+          <i data-lucide="external-link" class="w-4 h-4"></i>
         </a>
       </footer>
     </div>
 
-    <!-- Dark Mode Script -->
+    <!-- Scripts -->
     <script src="./script.js"></script>
   </body>
 </html>
