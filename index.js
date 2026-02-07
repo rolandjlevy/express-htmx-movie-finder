@@ -37,22 +37,24 @@ app.post('/search', async (req, res) => {
     const response = await axios.get(omdbUrl);
     const movieData = response.data;
 
-    if (movieData.Response === 'True') {
-      // const movies = movieData.Search.map((item) => getMovie(item)).join('');
-      const limitedMovies = movieData.Search.slice(0, 20);
-      const movies = limitedMovies.map((item) => getMovie(item)).join('');
-      res.send(`
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          ${movies}
-        </div>
-      `);
-    } else {
-      res.send(`
-        <p class="text-center text-gray-600 text-lg">
-          No results found for "<strong>${movieTitle}</strong>"
-        </p>
-      `);
+    const pages = [1, 2];
+    const responses = await Promise.all(
+      pages.map((page) =>
+        axios.get(
+          `http://www.omdbapi.com/?s=${encodedTitle}&page=${page}&apikey=${OMDB_API_KEY}`
+        )
+      )
+    );
+    const movies = responses.flatMap((r) => r.data?.Search ?? []).slice(0, 20);
+
+    if (!movies.length) {
+      return res.send(
+        ` <p class="text-center text-gray-600 dark:text-gray-300 text-lg"> No results found for "<strong>${movieTitle}</strong>" </p> `
+      );
     }
+    res.send(
+      ` <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"> ${movies.map(getMovie).join('')} </div> `
+    );
   } catch (error) {
     console.error('Error fetching movie data:', error.message);
     res.status(500).send(`

@@ -3,23 +3,29 @@
 A simple movie finder using HTMX to post requests to API endpoints in express app
 
 ### Live demo hosted on Vercel
+
 - [Movie Finder Demo](https://express-htmx-movie-finder.vercel.app/)
-    
+
 ### View the project in VS Code Simple browser
+
 - Get the URL for the page - see PORTS in terminal
 - From command palette: Simple Browser: Show
 - then paste in that URL
-  
+
 ### To run this project in a Codespace
 
+- duplicate `.env-example` and rename it to `.env` then add a valid OMDB API key to it
 - in the Terminal run:
+
 ```bash
-npm i -g http-server 
+npm i -g http-server
 http-server -c-1
 ```
+
 - then click 'Open in Browser'
 
 ### Links
+
 - [Htmx docs](https://htmx.org/docs)
 - [Htmx examples](https://htmx.org/examples)
 - [Htmx server examples](https://htmx.org/server-examples)
