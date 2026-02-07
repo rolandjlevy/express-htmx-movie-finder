@@ -2,113 +2,38 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
 }
 
-body {
-  margin: 30px;
+html {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Lexend', 'Inter', system-ui, sans-serif;
 }
 
-/* Form Styling */
-.search-form {
-  max-width: 500px;
-  margin: 2rem 0;
-  padding: 1rem;
-  border: 1px solid #e1e1e1;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+details[open] .details-content {
+  max-height: 800px; /* enough for your code blocks */
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.details-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
 }
 
-.form-label-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+code[class*='language-'],
+pre code[class*='language-'] {
+  font-size: 0.8rem !important;
+  line-height: 1 !important;
 }
 
-.form-label {
-  font-size: 1rem;
-  color: #444;
-  margin-right: 5px;
+pre[class*='language-'] {
+  background: hsl(215, 28%, 25%) !important;
 }
 
-.form-input {
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: border-color 0.3s;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #007bff;
-}
-
-.search-button {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.search-button:hover,
-.search-button:focus {
-  background-color: #0056b3;
-  outline: none;
-}
-
-.movies {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.movies > section {
-  max-width: 300px;
-}
-
-.movies > section > h2 {
-  overflow-wrap: break-word;
-  word-break: break-word;
-  text-overflow: ellipsis;
-  margin-bottom: 10px;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.htmx-indicator {
-  border: 3px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #000;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 1s linear infinite;
-  opacity: 0;
-  transition: opacity 500ms ease-in;
-}
-
-.htmx-request .htmx-indicator {
-  opacity: 1;
+.dark pre[class*='language-'] {
+  background: hsl(215, 28%, 10%) !important;
 }
