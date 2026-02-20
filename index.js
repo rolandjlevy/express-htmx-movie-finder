@@ -238,11 +238,22 @@ app.post('/search', async (req, res) => {
       </div>
     `);
   } catch (error) {
-    console.error('Error fetching movie data:', error.message);
-    return res.status(500).send(`
-      <p class="text-red-600 text-center font-semibold">
-        Server Error! Unable to fetch movie data.
-      </p>
+    const errorMsg = error.response
+      ? `${error.response.status} ${error.response.statusText}`
+      : error.message;
+    return res.status(200).send(`
+        <div
+        id="errorMessage"
+        class="mt-8 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800"
+      >
+        <div class="flex items-start gap-3">
+          <i data-lucide="alert-circle" class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0"></i>
+          <div>
+            <h3 class="font-semibold text-red-800 dark:text-red-300">Error</h3>
+            <p id="errorText" class="text-red-700 dark:text-red-400 text-sm mt-1">Error fetching OMDB movie data: ${errorMsg}</p>
+          </div>
+        </div>
+      </div>
     `);
   }
 });
