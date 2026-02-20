@@ -1,4 +1,3 @@
-import { randomMovies } from './random-movies.js';
 const toggleBtn = document.getElementById('themeToggle');
 const root = document.documentElement;
 
