@@ -1,3 +1,4 @@
+import { randomMovies } from './random-movies.js';
 const toggleBtn = document.getElementById('themeToggle');
 const root = document.documentElement;
 
@@ -18,69 +19,6 @@ clearBtn.addEventListener('click', () => {
   document.getElementById('movieTitle').value = '';
   document.getElementById('result').innerHTML = '';
 });
-
-const randomMovies = [
-  '2001: A Space Odyssey',
-  'A Clockwork Orange',
-  'Alien',
-  'All About Eve',
-  'Apocalypse Now',
-  'Avengers',
-  'Batman',
-  'Ben-Hur',
-  'Casablanca',
-  'Chinatown',
-  'Citizen Kane',
-  'Forrest Gump',
-  'Godzilla',
-  'Gone with the Wind',
-  'Harry Potter',
-  'Hulk',
-  'Inception',
-  'Iron Man',
-  'James Bond',
-  'Jaws',
-  'Jurassic Park',
-  'King Kong',
-  'Lawrence of Arabia',
-  'Lord of the Rings',
-  'Mission Impossible',
-  'My Fair Lady',
-  'North by Northwest',
-  'On the Waterfront',
-  'Psycho',
-  'Pulp Fiction',
-  'Raging Bull',
-  'Rear Window',
-  'Rocky',
-  'Roman Holiday',
-  'Singin in the Rain',
-  'Some Like It Hot',
-  'Spider-Man',
-  'Star Trek',
-  'Star Wars',
-  'Sunset Boulevard',
-  'Superman',
-  'Taxi Driver',
-  'Terminator',
-  'The Birds',
-  'The Dark Knight',
-  'The Exorcist',
-  'The Godfather',
-  'The Godfather Part II',
-  'The Graduate',
-  'The Maltese Falcon',
-  'The Matrix',
-  'The Shawshank Redemption',
-  'The Sound of Music',
-  'The Third Man',
-  'The Wizard of Oz',
-  'Thor',
-  'Transformers',
-  'Vertigo',
-  'West Side Story',
-  'X-Men'
-];
 
 // Random Movie button
 const randomBtn = document.getElementById('randomBtn');

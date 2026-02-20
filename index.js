@@ -27,16 +27,31 @@ const getMovieSimple = (movie) => {
     </div>
   `;
 };
+
 const validImageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
 
-function getMovie(movie) {
-  // Skip movies without valid poster images
-  if (
-    !validImageExtensions.some((ext) =>
-      movie.Poster?.toLowerCase().includes(ext)
-    ) ||
-    movie.Poster === 'N/A'
-  ) {
+const hasValidPosterExtension = (posterUrl) => {
+  return (
+    !!posterUrl &&
+    posterUrl !== 'N/A' &&
+    validImageExtensions.some((ext) => posterUrl.toLowerCase().includes(ext))
+  );
+};
+
+const isValidImageUrl = async (posterUrl) => {
+  if (!hasValidPosterExtension(posterUrl)) {
+    return false;
+  }
+  try {
+    const response = await axios.head(posterUrl, { timeout: 5000 });
+    return response.status === 200 && response.headers['content-length'] > 1000;
+  } catch {
+    return false;
+  }
+};
+
+const getMovie = (movie) => {
+  if (!hasValidPosterExtension(movie.Poster)) {
     return '';
   }
   const runtime =
@@ -158,7 +173,7 @@ function getMovie(movie) {
 
     </div>
   `;
-}
+};
 
 app.post('/search', async (req, res) => {
   const { movieTitle } = req.body;
@@ -198,15 +213,33 @@ app.post('/search', async (req, res) => {
       )
     );
 
-    // 3. Render the richer movie cards
-    res.send(`
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        ${detailedMovies.map(getMovie).join('')}
+    // 3. Filter out movies with invalid/missing images
+    const validMovies = await Promise.all(
+      detailedMovies.map(async (movie) => ({
+        ...movie,
+        isValidImage: await isValidImageUrl(movie.Poster)
+      }))
+    );
+
+    const moviesWithValidImages = validMovies.filter((m) => m.isValidImage);
+
+    if (!moviesWithValidImages.length) {
+      return res.send(
+        `<p class="text-center text-gray-600 dark:text-gray-300 text-lg">
+          No results with valid images found for "<strong>${movieTitle}</strong>"
+        </p>`
+      );
+    }
+
+    // 4. Render the richer movie cards
+    return res.send(`
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        ${moviesWithValidImages.map(getMovie).join('')}
       </div>
     `);
   } catch (error) {
     console.error('Error fetching movie data:', error.message);
-    res.status(500).send(`
+    return res.status(500).send(`
       <p class="text-red-600 text-center font-semibold">
         Server Error! Unable to fetch movie data.
       </p>
