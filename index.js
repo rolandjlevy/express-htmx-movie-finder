@@ -27,8 +27,18 @@ const getMovieSimple = (movie) => {
     </div>
   `;
 };
+const validImageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
 
 function getMovie(movie) {
+  // Skip movies without valid poster images
+  if (
+    !validImageExtensions.some((ext) =>
+      movie.Poster?.toLowerCase().includes(ext)
+    ) ||
+    movie.Poster === 'N/A'
+  ) {
+    return '';
+  }
   const runtime =
     movie?.Runtime !== 'N/A'
       ? `<span class="mx-1">•</span>${movie.Runtime}`
