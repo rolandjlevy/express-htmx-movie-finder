@@ -1,4 +1,4 @@
-# Htmx Movie Finder
+# Htmx Movie Search
 
 A showcase of HTMX in action — fast, elegant, server‑driven UI updates without the overhead of a client‑side framework.
 
