@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Movie Finder 🎬</title>
+    <title>Rapid HTMX Search 🎬</title>
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -38,23 +38,24 @@
     <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-markup.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-javascript.min.js"></script>
+
   </head>
   <body class="bg-gray-100 dark:bg-gray-900 min-h-screen p-6 transition-colors pt-12">
   <body class="bg-gray-100 dark:bg-gray-900 min-h-screen p-6 transition-colors">
     <div class="max-w-4xl mx-auto">
       <!-- Header Row -->
       <div class="flex justify-between items-center mb-4">
-        <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight">
           <a href="/"
             class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent drop-shadow-sm"
-            >Movie Finder</a
+            >Rapid HTMX Search</a
           >
-          🎬
+            <i data-lucide="clapperboard" class="inline-block w-8 h-8 sm:w-10 sm:h-10 align-[-0.1em] text-secondary"></i>
         </h1>
         <!-- Dark Mode Toggle -->
         <button
           id="themeToggle"
-          class="flex items-center gap-2 px-3 py-2 rounded-lg shadow bg-surface-light text-gray-800 dark:bg-primary-dark dark:text-white font-medium hover:opacity-80 transition"
+          class="flex items-center gap-2 px-3 py-2 rounded-lg shadow bg-surface-light text-gray-800 dark:bg-primary-dark dark:text-white font-medium hover:opacity-80  text-sm sm:text-base transition"
         >
           <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
           <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
@@ -140,7 +141,7 @@
           <!-- Search (Primary) -->
           <button
             type="submit"
-            class="flex items-center gap-2 px-3 py-2 rounded-lg shadow bg-primary hover:bg-primary-dark text-white font-medium transition"
+            class="flex items-center gap-2 px-3 py-2 rounded-lg shadow bg-primary hover:bg-primary-dark text-white font-medium text-sm sm:text-base transition"
           >
             <i data-lucide="search" class="w-5 h-5"></i>
             Search
@@ -150,7 +151,7 @@
           <button
             type="button"
             id="randomBtn"
-            class="flex items-center gap-2 px-3 py-2 rounded-lg shadow bg-secondary hover:bg-secondary-dark text-white font-medium transition"
+            class="flex items-center gap-2 px-3 py-2 rounded-lg shadow bg-secondary hover:bg-secondary-dark text-white font-medium text-sm sm:text-base transition"
           >
             <i data-lucide="dice-5" class="w-5 h-5"></i>
             Random
@@ -160,7 +161,7 @@
           <button
             type="button"
             id="clearBtn"
-            class="flex items-center gap-2 px-3 py-2 rounded-lg shadow bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-medium hover:opacity-80 transition"
+            class="flex items-center gap-2 px-3 py-2 rounded-lg shadow bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-medium text-sm sm:text-base hover:opacity-80 transition"
           >
             <i data-lucide="x" class="w-5 h-5"></i>
             <span class="hidden sm:inline">Clear</span>

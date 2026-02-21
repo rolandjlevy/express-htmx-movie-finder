@@ -60,8 +60,8 @@ const randomMovies = [
 const toggleBtn = document.getElementById('themeToggle');
 const root = document.documentElement;
 
-// Load saved theme
-if (localStorage.theme === 'dark') {
+// Initialize theme on page load
+if (localStorage.theme !== 'light') {
   root.classList.add('dark');
 }
 
