@@ -178,6 +178,10 @@ const getMovie = (movie) => {
 app.post('/search', async (req, res) => {
   const { movieTitle } = req.body;
   const encodedTitle = encodeURIComponent(movieTitle);
+  const omdbRequestConfig = {
+    timeout: 8000,
+    validateStatus: (status) => status >= 200 && status < 300
+  };
 
   try {
     // 1. Fetch search results (2 pages)
@@ -185,7 +189,8 @@ app.post('/search', async (req, res) => {
     const responses = await Promise.all(
       pages.map((page) =>
         axios.get(
-          `https://www.omdbapi.com/?s=${encodedTitle}&page=${page}&apikey=${OMDB_API_KEY}`
+          `https://www.omdbapi.com/?s=${encodedTitle}&page=${page}&apikey=${OMDB_API_KEY}`,
+          omdbRequestConfig
         )
       )
     );
@@ -193,6 +198,27 @@ app.post('/search', async (req, res) => {
     const searchResults = responses
       .flatMap((r) => r.data?.Search ?? [])
       .slice(0, 20);
+
+    const apiReturnedError = responses.find(
+      (r) => r.data?.Response === 'False' && r.data?.Error
+    );
+
+    if (apiReturnedError) {
+      return res.status(200).send(`
+        <div
+          id="errorMessage"
+          class="mt-8 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800"
+        >
+          <div class="flex items-start gap-3">
+            <i data-lucide="alert-circle" class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0"></i>
+            <div>
+              <h3 class="font-semibold text-red-800 dark:text-red-300">Error</h3>
+              <p id="errorText" class="text-red-700 dark:text-red-400 text-sm mt-1">Movie service error: ${apiReturnedError.data.Error}</p>
+            </div>
+          </div>
+        </div>
+      `);
+    }
 
     if (!searchResults.length) {
       return res.send(
@@ -207,7 +233,8 @@ app.post('/search', async (req, res) => {
       searchResults.map((movie) =>
         axios
           .get(
-            `https://www.omdbapi.com/?i=${movie.imdbID}&plot=full&apikey=${OMDB_API_KEY}`
+            `https://www.omdbapi.com/?i=${movie.imdbID}&plot=full&apikey=${OMDB_API_KEY}`,
+            omdbRequestConfig
           )
           .then((r) => r.data)
       )
@@ -239,8 +266,11 @@ app.post('/search', async (req, res) => {
     `);
   } catch (error) {
     const errorMsg = error.response
-      ? `${error.response.status} ${error.response.statusText}`
-      : error.message;
+      ? `Movie service returned ${error.response.status} ${error.response.statusText}`
+      : error.request
+        ? 'Movie service did not respond. Please try again in a moment.'
+        : `Request failed: ${error.message}`;
+
     return res.status(200).send(`
         <div
         id="errorMessage"
