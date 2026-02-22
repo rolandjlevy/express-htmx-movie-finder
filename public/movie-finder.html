@@ -91,7 +91,10 @@
         </summary>
 
         <!-- Animated container -->
-        <div class="details-content mt-4">
+        <div class="details-content mt-2">
+          <span class="text-sm text-gray-500 dark:text-gray-400">
+            When the form is submitted, HTMX posts a request to the Express server with the movieTitle. The server processes the request, fetches matching movies, and returns an HTML snippet that HTMX swaps into the page without a full reload.
+          </span>
           <pre class="rounded-lg overflow-x-auto">
 <code class="language-html text-xs">&lt;form
   hx-post="/search"
@@ -100,15 +103,14 @@
 &gt;
   &lt;input type="text" name="movieTitle" placeholder="Search for a movie…" /&gt;
 &lt;/form&gt;
-
 &lt;div id="result"&gt;&lt;/div&gt;</code>
-            </pre>
+</pre>
           <pre class="mt-4 rounded-lg overflow-x-auto">
-<code class="language-javascript text-xs">app.post("/search", async (req, res) =&gt; {
+<code class="language-javascript text-xs">// Express route handler for HTMX search request
+app.post("/search", async (req, res) =&gt; {
   const movies = await fetchMovies(req.body.movieTitle);
   res.send(renderMovieList(movies)); // HTMX swaps this into #result
-});</code>
-    </pre>
+});</code></pre>
         </div>
       </details>
       <form
