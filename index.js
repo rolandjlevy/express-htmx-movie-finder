@@ -74,14 +74,14 @@ const getMovie = (movie) => {
       ? `
         <div class="flex flex-wrap text-gray-700 dark:text-gray-300 gap-1 mt-2">
           ${movie.Genre.split(', ')
-            .map(
-              (g) => `
+    .map(
+      (g) => `
             <span class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">
               ${g}
             </span>
           `
-            )
-            .join('')}
+    )
+    .join('')}
         </div>
       `
       : '';
@@ -91,8 +91,8 @@ const getMovie = (movie) => {
       ? `
         <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
           <strong>Starring:</strong> ${movie.Actors.split(', ')
-            .slice(0, 3)
-            .join(', ')}
+    .slice(0, 3)
+    .join(', ')}
         </p>
       `
       : '';
@@ -153,8 +153,8 @@ const getMovie = (movie) => {
 
       <a
         href="https://www.youtube.com/results?search_query=${encodeURIComponent(
-          movie.Title + ' trailer'
-        )}"
+    movie.Title + ' trailer'
+  )}"
         target="_blank"
         class="mt-2 inline-block text-primary text-sm hover:underline"
       >
