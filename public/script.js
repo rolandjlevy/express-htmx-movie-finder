@@ -225,6 +225,17 @@
     }
   });
 
+  /* ---------- failed posters fall back to the placeholder ---------- */
+  document.addEventListener(
+    'error',
+    (event) => {
+      if (event.target.matches && event.target.matches('.poster img')) {
+        event.target.remove();
+      }
+    },
+    true
+  );
+
   /* ---------- footer year ---------- */
   document.getElementById('year').textContent = new Date().getFullYear();
 })();
