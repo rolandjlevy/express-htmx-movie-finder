@@ -3,196 +3,394 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rapid HTMX Search 🎬</title>
-    <!-- Tailwind CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- External Tailwind Config -->
-    <script src="./tailwind.config.js"></script>
-
-    <!-- HTMX -->
-    <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.min.js"></script>
-
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- Google Fonts -->
+    <title>Rapid HTMX Search</title>
+    <meta
+      name="description"
+      content="A film search built with HTMX and Express. Type a title and the server sends back ready-made HTML."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <!-- Set the theme before first paint: saved choice, else the OS setting -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          var dark = saved
+            ? saved === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.classList.toggle('dark', dark);
+        } catch (e) {
+          /* storage blocked: stay with the default light theme */
+        }
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@500;600&display=swap"
       rel="stylesheet"
     />
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎬%3C/text%3E%3C/svg%3E"
     />
-    <!-- Global CSS -->
     <link rel="stylesheet" href="styles.css" />
-
-    <!-- Prism CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.min.css"
-    />
-
-    <!-- Prism JS -->
-    <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-markup.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-javascript.min.js"></script>
-
+    <script src="vendor/htmx.min.js" defer></script>
+    <script src="script.js" defer></script>
   </head>
-  <body class="bg-gray-100 dark:bg-gray-900 min-h-screen p-6 transition-colors pt-12">
-  <body class="bg-gray-100 dark:bg-gray-900 min-h-screen p-6 transition-colors">
-    <div class="max-w-4xl mx-auto">
-      <!-- Header Row -->
-      <div class="flex justify-between items-center mb-4">
-        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight">
-          <a href="/"
-            class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent drop-shadow-sm"
-            >Rapid HTMX Search</a
+  <body>
+    <a class="skip-link" href="#q">Skip to search</a>
+
+    <header class="band">
+      <div class="wrap">
+        <div class="topbar">
+          <p class="brand">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="2" y="2" width="20" height="20" rx="2.18"></rect>
+              <path d="M7 2v20"></path>
+              <path d="M17 2v20"></path>
+              <path d="M2 12h20"></path>
+              <path d="M2 7h5"></path>
+              <path d="M2 17h5"></path>
+              <path d="M17 17h5"></path>
+              <path d="M17 7h5"></path>
+            </svg>
+            Rapid HTMX Search
+          </p>
+          <button
+            type="button"
+            id="themeToggle"
+            class="icon-btn on-band"
+            aria-label="Switch to dark theme"
           >
-            <i data-lucide="clapperboard" class="inline-block w-8 h-8 sm:w-10 sm:h-10 align-[-0.1em] text-secondary"></i>
-        </h1>
-        <!-- Dark Mode Toggle -->
-        <button
-          id="themeToggle"
-          class="flex items-center gap-2 px-3 py-2 rounded-lg shadow bg-surface-light text-gray-800 dark:bg-primary-dark dark:text-white font-medium hover:opacity-80  text-sm sm:text-base transition"
-        >
-          <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
-          <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
-          <span class="dark:hidden">Dark Mode</span>
-          <span class="hidden dark:inline">Light Mode</span>
-        </button>
-      </div>
-
-      <!-- About Section -->
-      <p
-        class="mb-4 text-gray-700 dark:text-gray-300 max-w-4xl leading-relaxed flex items-start gap-3"
-      >
-        <span>
-          This project explores building fast, elegant interfaces with
-          <strong>HTMX</strong>, a lightweight library that brings modern,
-          server‑driven patterns to traditional HTML. It demonstrates clean,
-          minimal‑JavaScript architecture by sending targeted server requests
-          and swapping returned HTML fragments into the page — no full reloads
-          or client‑side framework like React.
-        </span>
-      </p>
-      <details
-        class="group mb-4 bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-lg p-4 shadow-sm"
-      >
-        <summary
-          class="cursor-pointer flex items-center justify-between text-gray-800 dark:text-gray-100 font-medium"
-        >
-          <span>Show example HTMX request</span>
-          <i
-            data-lucide="chevron-down"
-            class="w-5 h-5 transition-transform group-open:rotate-180"
-          ></i>
-        </summary>
-
-        <!-- Animated container -->
-        <div class="details-content mt-2">
-          <span class="text-sm text-gray-500 dark:text-gray-400">
-            When the form is submitted, HTMX posts a request to the Express server with the movieTitle. The server processes the request, fetches matching movies, and returns an HTML snippet that HTMX swaps into the page without a full reload.
-          </span>
-          <pre class="rounded-lg overflow-x-auto">
-<code class="language-html text-xs">&lt;form
-  hx-post="/search"
-  hx-target="#result"
-  hx-swap="innerHTML"
-&gt;
-  &lt;input type="text" name="movieTitle" placeholder="Search for a movie…" /&gt;
-&lt;/form&gt;
-&lt;div id="result"&gt;&lt;/div&gt;</code>
-</pre>
-          <pre class="mt-4 rounded-lg overflow-x-auto">
-<code class="language-javascript text-xs">// Express route handler for HTMX search request
-app.post("/search", async (req, res) =&gt; {
-  const movies = await fetchMovies(req.body.movieTitle);
-  res.send(renderMovieList(movies)); // HTMX swaps this into #result
-});</code></pre>
+            <svg
+              class="icon-sun"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2"></path>
+              <path d="M12 20v2"></path>
+              <path d="m4.93 4.93 1.41 1.41"></path>
+              <path d="m17.66 17.66 1.41 1.41"></path>
+              <path d="M2 12h2"></path>
+              <path d="M20 12h2"></path>
+              <path d="m6.34 17.66-1.41 1.41"></path>
+              <path d="m19.07 4.93-1.41 1.41"></path>
+            </svg>
+            <svg
+              class="icon-moon"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+            </svg>
+          </button>
         </div>
-      </details>
-      <form
-        hx-post="/search"
-        hx-target="#result"
-        hx-swap="innerHTML"
-        hx-indicator="#spinner"
-        class="space-y-4 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md transition-colors"
-      >
-        <div class="relative">
-          <input
-            type="text"
-            id="movieTitle"
-            name="movieTitle"
-            required
-            class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:outline-none transition-colors"
-            placeholder="Search for a movie..."
-          />
 
-          <!-- Spinner -->
-          <div id="spinner" class="htmx-indicator absolute right-3 top-3">
-            <div
-              class="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full"
-            ></div>
+        <div class="hero">
+          <div class="hero-main">
+            <p class="eyebrow">HTMX · Express · OMDb</p>
+            <h1>
+              <span class="h1-line">Search films.</span>
+              <span class="h1-line accent">Watch HTML arrive.</span>
+            </h1>
+            <p class="lede">
+              Type a title. The server sends back finished HTML and HTMX drops
+              it into the page: no framework, no page reload.
+            </p>
+
+            <form
+              id="searchForm"
+              class="search"
+              role="search"
+              hx-get="/search"
+              hx-trigger="input delay:500ms, search, submit"
+              hx-sync="this:replace"
+              hx-target="#result"
+              hx-swap="innerHTML"
+            >
+              <label for="q">Film title</label>
+              <div class="field">
+                <svg
+                  class="field-icon"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </svg>
+                <input
+                  id="q"
+                  name="q"
+                  type="search"
+                  placeholder="e.g. Vertigo"
+                  autocomplete="off"
+                  enterkeyhint="search"
+                  maxlength="100"
+                />
+                <span class="spinner" aria-hidden="true"></span>
+                <button
+                  type="button"
+                  id="clearBtn"
+                  class="clear-btn"
+                  aria-label="Clear search"
+                >
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M18 6 6 18"></path>
+                    <path d="m6 6 12 12"></path>
+                  </svg>
+                </button>
+              </div>
+              <p class="hint">Results update as you type.</p>
+              <div class="actions">
+                <button type="submit" class="btn btn-primary">
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                  </svg>
+                  Search
+                </button>
+                <button type="button" id="randomBtn" class="btn btn-secondary">
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                    <circle cx="8" cy="8" r=".6"></circle>
+                    <circle cx="16" cy="8" r=".6"></circle>
+                    <circle cx="12" cy="12" r=".6"></circle>
+                    <circle cx="8" cy="16" r=".6"></circle>
+                    <circle cx="16" cy="16" r=".6"></circle>
+                  </svg>
+                  Surprise me
+                </button>
+              </div>
+            </form>
+
+            <div class="try">
+              <span class="try-label" id="tryLabel">Try</span>
+              <ul class="try-list" aria-labelledby="tryLabel">
+                <li>
+                  <button
+                    type="button"
+                    class="chip-btn on-band"
+                    data-q="Vertigo"
+                  >
+                    Vertigo
+                  </button>
+                </li>
+                <li>
+                  <button type="button" class="chip-btn on-band" data-q="Alien">
+                    Alien
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    class="chip-btn on-band"
+                    data-q="Casablanca"
+                  >
+                    Casablanca
+                  </button>
+                </li>
+                <li>
+                  <button type="button" class="chip-btn on-band" data-q="Jaws">
+                    Jaws
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
+
+          <aside class="reqlog" id="reqlog" aria-labelledby="reqlogTitle">
+            <div class="reqlog-bar">
+              <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <h2 id="reqlogTitle">Last request</h2>
+            </div>
+            <div class="reqlog-body">
+              <p class="reqlog-line">
+                <span class="verb">GET</span>
+                <span id="reqPath">/search?q=…</span>
+              </p>
+              <p class="reqlog-line" id="reqStatus">
+                <span class="muted">Waiting for your first search</span>
+              </p>
+              <p class="reqlog-line" id="reqSize"></p>
+              <div class="reqlog-bar-track" aria-hidden="true">
+                <span id="reqMeter"></span>
+              </div>
+              <p class="reqlog-label" id="reqPreviewLabel">Example response</p>
+              <pre
+                class="reqlog-preview"
+                id="reqPreview"
+                aria-labelledby="reqPreviewLabel"
+              ><code>&lt;article class="card"&gt;
+  &lt;h2&gt;Vertigo&lt;/h2&gt;
+  &lt;p&gt;1958 · 128 min · 8.3&lt;/p&gt;
+  …
+&lt;/article&gt;</code></pre>
+              <p class="reqlog-note">
+                HTMX swaps the response into <code>#result</code>.
+              </p>
+            </div>
+          </aside>
         </div>
+      </div>
+    </header>
 
-        <!-- Buttons -->
-        <div class="flex gap-3 pt-2">
-          <!-- Search (Primary) -->
-          <button
-            type="submit"
-            class="flex items-center gap-2 px-3 py-2 rounded-lg shadow bg-primary hover:bg-primary-dark text-white font-medium text-sm sm:text-base transition"
+    <main class="wrap">
+      <p id="status" class="status" role="status"></p>
+      <div id="result"></div>
+
+      <section class="code-panel" aria-labelledby="codeTitle">
+        <details>
+          <summary>
+            <h2 id="codeTitle">See the code</h2>
+            <svg
+              class="chev"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </summary>
+          <p class="code-intro">
+            The form sends a GET request to /search as you type. Express asks
+            OMDb and returns HTML, and HTMX swaps it into the results area. A
+            few lines of script keep the address bar in sync, so a search can be
+            shared.
+          </p>
+
+          <div class="code-block">
+            <div class="code-head">
+              <h3>Markup (trimmed)</h3>
+              <button
+                type="button"
+                class="copy-btn"
+                data-copy="codeMarkup"
+                aria-label="Copy markup"
+              >
+                Copy
+              </button>
+            </div>
+            <pre
+              class="code"
+              id="codeMarkup"
+              tabindex="0"
+              aria-label="Example form markup"
+            ><code><span class="p">&lt;</span><span class="t">form</span>
+  <span class="t">hx-get</span>=<span class="s">"/search"</span>
+  <span class="t">hx-trigger</span>=<span class="s">"input delay:500ms,</span>
+<span class="s">    search, submit"</span>
+  <span class="t">hx-sync</span>=<span class="s">"this:replace"</span>
+  <span class="t">hx-target</span>=<span class="s">"#result"</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="t">input</span> <span class="t">type</span>=<span class="s">"search"</span>
+    <span class="t">name</span>=<span class="s">"q"</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="t">form</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="t">div</span> <span class="t">id</span>=<span class="s">"result"</span><span class="p">&gt;&lt;/</span><span class="t">div</span><span class="p">&gt;</span></code></pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-head">
+              <h3>Server (simplified)</h3>
+              <button
+                type="button"
+                class="copy-btn"
+                data-copy="codeServer"
+                aria-label="Copy server code"
+              >
+                Copy
+              </button>
+            </div>
+            <pre
+              class="code"
+              id="codeServer"
+              tabindex="0"
+              aria-label="Example Express route handler"
+            ><code><span class="c">// index.js (simplified)</span>
+app.<span class="f">get</span>(<span class="s">'/search'</span>, handler);
+
+<span class="k">async function</span> <span class="f">handler</span>(req, res) {
+  <span class="k">const</span> { q } = req.query;
+  <span class="k">const</span> films = <span class="k">await</span> <span class="f">search</span>(q);
+  res.<span class="f">send</span>(films.<span class="f">map</span>(card).<span class="f">join</span>(<span class="s">''</span>));
+}</code></pre>
+          </div>
+
+          <a
+            class="code-link"
+            href="https://github.com/rolandjlevy/express-htmx-movie-finder/blob/HEAD/index.js"
+            target="_blank"
+            rel="noopener noreferrer"
+            >See the real handler on GitHub<span class="sr-only">
+              (opens in a new tab)</span
+            ></a
           >
-            <i data-lucide="search" class="w-5 h-5"></i>
-            Search
-          </button>
+        </details>
+      </section>
+    </main>
 
-          <!-- Random (Secondary) -->
-          <button
-            type="button"
-            id="randomBtn"
-            class="flex items-center gap-2 px-3 py-2 rounded-lg shadow bg-secondary hover:bg-secondary-dark text-white font-medium text-sm sm:text-base transition"
-          >
-            <i data-lucide="dice-5" class="w-5 h-5"></i>
-            Random
-          </button>
-
-          <!-- Clear (Neutral) -->
-          <button
-            type="button"
-            id="clearBtn"
-            class="flex items-center gap-2 px-3 py-2 rounded-lg shadow bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-medium text-sm sm:text-base hover:opacity-80 transition"
-          >
-            <i data-lucide="x" class="w-5 h-5"></i>
-            <span class="hidden sm:inline">Clear</span>
-          </button>
-        </div>
-      </form>
-
-      <!-- Result Container -->
-      <div id="result" class="mt-8"></div>
-
-      <!-- Footer -->
-      <footer
-        class="mt-16 text-center text-gray-600 dark:text-gray-400 text-sm py-4 border-t border-gray-300 dark:border-gray-700"
-      >
+    <footer class="wrap site-footer">
+      <p>
         &copy; Roland Levy <span id="year"></span>
         <a
           href="https://rolandlevy.co.uk"
           target="_blank"
-          rel="noopener"
-          class="inline-flex items-center gap-1 text-primary dark:text-primary hover:underline ml-1"
+          rel="noopener noreferrer"
+          >See more of my projects<span class="sr-only">
+            (opens in a new tab)</span
+          ></a
         >
-          see more of my projects
-          <i data-lucide="external-link" class="w-4 h-4"></i>
-        </a>
-      </footer>
-    </div>
-
-    <!-- Scripts -->
-    <script src="script.js"></script>
-
+      </p>
+    </footer>
   </body>
 </html>

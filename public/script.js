@@ -1,107 +1,217 @@
-const randomMovies = [
-  '2001: A Space Odyssey',
-  'Alien',
-  'Apocalypse Now',
-  'Avengers',
-  'Batman',
-  'Ben-Hur',
-  'Casablanca',
-  'Chinatown',
-  'Citizen Kane',
-  'Forrest Gump',
-  'Godzilla',
-  'Gone with the Wind',
-  'Harry Potter',
-  'Hulk',
-  'Inception',
-  'Iron Man',
-  'James Bond',
-  'Jaws',
-  'Jurassic Park',
-  'King Kong',
-  'Lawrence of Arabia',
-  'Lord of the Rings',
-  'Mission Impossible',
-  'My Fair Lady',
-  'North by Northwest',
-  'On the Waterfront',
-  'Psycho',
-  'Pulp Fiction',
-  'Raging Bull',
-  'Rear Window',
-  'Rocky',
-  'Roman Holiday',
-  'Singin in the Rain',
-  'Some Like It Hot',
-  'Spider-Man',
-  'Star Trek',
-  'Star Wars',
-  'Sunset Boulevard',
-  'Superman',
-  'Taxi Driver',
-  'Terminator',
-  'The Birds',
-  'The Dark Knight',
-  'The Exorcist',
-  'The Godfather',
-  'The Godfather Part II',
-  'The Graduate',
-  'The Maltese Falcon',
-  'The Matrix',
-  'The Sound of Music',
-  'The Wizard of Oz',
-  'Thor',
-  'Transformers',
-  'Vertigo',
-  'West Side Story',
-  'X-Men'
-];
+/* global htmx */
+(() => {
+  const randomMovies = [
+    '2001: A Space Odyssey',
+    'Alien',
+    'Apocalypse Now',
+    'Avengers',
+    'Batman',
+    'Ben-Hur',
+    'Casablanca',
+    'Chinatown',
+    'Citizen Kane',
+    'Forrest Gump',
+    'Godzilla',
+    'Gone with the Wind',
+    'Harry Potter',
+    'Hulk',
+    'Inception',
+    'Iron Man',
+    'James Bond',
+    'Jaws',
+    'Jurassic Park',
+    'King Kong',
+    'Lawrence of Arabia',
+    'Lord of the Rings',
+    'Mission Impossible',
+    'My Fair Lady',
+    'North by Northwest',
+    'On the Waterfront',
+    'Psycho',
+    'Pulp Fiction',
+    'Raging Bull',
+    'Rear Window',
+    'Rocky',
+    'Roman Holiday',
+    'Singin in the Rain',
+    'Some Like It Hot',
+    'Spider-Man',
+    'Star Trek',
+    'Star Wars',
+    'Sunset Boulevard',
+    'Superman',
+    'Taxi Driver',
+    'Terminator',
+    'The Birds',
+    'The Dark Knight',
+    'The Exorcist',
+    'The Godfather',
+    'The Godfather Part II',
+    'The Graduate',
+    'The Maltese Falcon',
+    'The Matrix',
+    'The Sound of Music',
+    'The Wizard of Oz',
+    'Thor',
+    'Transformers',
+    'Vertigo',
+    'West Side Story',
+    'X-Men'
+  ];
 
-const toggleBtn = document.getElementById('themeToggle');
-const root = document.documentElement;
+  const root = document.documentElement;
+  const form = document.getElementById('searchForm');
+  const input = document.getElementById('q');
+  const result = document.getElementById('result');
+  const status = document.getElementById('status');
+  const themeToggle = document.getElementById('themeToggle');
+  const reqlog = document.getElementById('reqlog');
+  const reqPath = document.getElementById('reqPath');
+  const reqStatus = document.getElementById('reqStatus');
+  const reqSize = document.getElementById('reqSize');
+  const reqMeter = document.getElementById('reqMeter');
+  const reqPreview = document.getElementById('reqPreview');
+  const reqPreviewLabel = document.getElementById('reqPreviewLabel');
 
-// Initialize theme on page load
-if (localStorage.theme !== 'light') {
-  root.classList.add('dark');
-}
+  /* ---------- theme ---------- */
+  const applyTheme = (dark) => {
+    root.classList.toggle('dark', dark);
+    themeToggle.setAttribute(
+      'aria-label',
+      dark ? 'Switch to light theme' : 'Switch to dark theme'
+    );
+  };
 
-toggleBtn.addEventListener('click', () => {
-  const isDark = root.classList.toggle('dark');
-  localStorage.theme = isDark ? 'dark' : 'light';
-});
+  applyTheme(root.classList.contains('dark'));
 
-// Clear button
-const clearBtn = document.getElementById('clearBtn');
+  themeToggle.addEventListener('click', () => {
+    const dark = !root.classList.contains('dark');
+    applyTheme(dark);
+    try {
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    } catch {
+      /* storage blocked: the choice just won't persist */
+    }
+  });
 
-clearBtn.addEventListener('click', () => {
-  document.getElementById('movieTitle').value = '';
-  document.getElementById('result').innerHTML = '';
-});
+  /* ---------- search helpers ---------- */
+  const searchFor = (title) => {
+    input.value = title;
+    input.focus();
+    form.requestSubmit();
+  };
 
-// Random Movie button
-const randomBtn = document.getElementById('randomBtn');
-randomBtn.addEventListener('click', () => {
-  // Pick a random movie from the list
-  const pick = randomMovies[Math.floor(Math.random() * randomMovies.length)];
-  // Set the input value
-  document.getElementById('movieTitle').value = pick;
-  // Trigger HTMX form submission programmatically
-  document
-    .querySelector('form')
-    .dispatchEvent(new Event('submit', { cancelable: true }));
-});
+  const clearSearch = () => {
+    input.value = '';
+    result.innerHTML = '';
+    status.textContent = '';
+    history.replaceState(null, '', '/');
+    input.focus();
+  };
 
-// Auto-update footer year
-document.getElementById('year').textContent = new Date().getFullYear();
+  // One delegated listener, so it keeps working for content htmx swaps in.
+  document.addEventListener('click', (event) => {
+    const target = event.target.closest(
+      '[data-q], [data-clear], [data-retry], [data-copy], #randomBtn, #clearBtn'
+    );
+    if (!target) {
+      return;
+    }
 
-// Activate Lucide Icons
-document.addEventListener('DOMContentLoaded', () => {
-  // eslint-disable-next-line no-undef
-  lucide.createIcons();
-});
+    if (target.dataset.q) {
+      searchFor(target.dataset.q);
+    } else if (target.id === 'randomBtn') {
+      searchFor(randomMovies[Math.floor(Math.random() * randomMovies.length)]);
+    } else if (target.id === 'clearBtn' || target.dataset.clear !== undefined) {
+      clearSearch();
+    } else if (target.dataset.retry !== undefined) {
+      form.requestSubmit();
+    } else if (target.dataset.copy) {
+      copyCode(target);
+    }
+  });
 
-// Re-activate icons after HTMX content swap
-document.body.addEventListener('htmx:afterSwap', () => {
-  // eslint-disable-next-line no-undef
-  lucide.createIcons();
-});
+  const copyCode = async (button) => {
+    const block = document.getElementById(button.dataset.copy);
+    try {
+      await navigator.clipboard.writeText(block.innerText);
+      button.textContent = 'Copied';
+    } catch {
+      button.textContent = 'Press Ctrl+C';
+    }
+    setTimeout(() => {
+      button.textContent = 'Copy';
+    }, 2000);
+  };
+
+  /* ---------- live request log ---------- */
+  let startedAt = 0;
+
+  const formatBytes = (bytes) =>
+    bytes < 1024 ? `${bytes} B` : `${(bytes / 1024).toFixed(1)} KB`;
+
+  document.body.addEventListener('htmx:beforeRequest', (event) => {
+    if (event.detail.elt !== form) {
+      return;
+    }
+    startedAt = performance.now();
+    reqPath.textContent = decodeURIComponent(
+      event.detail.pathInfo.finalRequestPath
+    );
+  });
+
+  document.body.addEventListener('htmx:afterRequest', (event) => {
+    if (event.detail.elt !== form) {
+      return;
+    }
+    const { xhr, successful } = event.detail;
+    const ms = Math.round(performance.now() - startedAt);
+
+    if (!xhr || xhr.status === 0) {
+      reqStatus.innerHTML = '<span class="muted">No response</span>';
+      reqSize.textContent = '';
+      return;
+    }
+
+    const films = (xhr.responseText.match(/class="card"/g) || []).length;
+    const bytes = new Blob([xhr.responseText]).size;
+    reqStatus.textContent = `${xhr.status} ${successful ? 'OK' : 'Error'} · ${ms} ms`;
+    reqSize.textContent = `${films === 1 ? '1 film' : `${films} films`} · ${formatBytes(bytes)} of HTML`;
+
+    // Show the real start of the HTML the server sent (textContent keeps it inert).
+    const firstCard = xhr.responseText.match(
+      /<article class="card">[\s\S]*?<h2>[\s\S]*?<\/h2>/
+    );
+    reqPreview.textContent = (firstCard ? firstCard[0] : xhr.responseText)
+      .trim()
+      .replace(/\n\s*\n/g, '\n')
+      .replace(/^ {2,}/gm, '  ')
+      .slice(0, 260);
+    reqPreviewLabel.textContent = 'Response (start of the HTML)';
+    reqMeter.style.width = `${Math.min(100, Math.max(8, 100 - ms / 20))}%`;
+
+    reqlog.classList.remove('flash');
+    void reqlog.offsetWidth; // restart the animation
+    reqlog.classList.add('flash');
+
+    // Keep the address bar shareable without filling the history.
+    const query = input.value.trim();
+    history.replaceState(
+      null,
+      '',
+      query ? `/?q=${encodeURIComponent(query)}` : '/'
+    );
+  });
+
+  /* ---------- open a shared link ---------- */
+  document.addEventListener('DOMContentLoaded', () => {
+    const shared = new URLSearchParams(window.location.search).get('q');
+    if (shared) {
+      input.value = shared;
+      htmx.trigger(form, 'submit');
+    }
+  });
+
+  /* ---------- footer year ---------- */
+  document.getElementById('year').textContent = new Date().getFullYear();
+})();
