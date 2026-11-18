@@ -211,16 +211,19 @@
     }
   });
 
-  /* ---------- "Code" link opens the code panel ---------- */
-  const openCode = document.querySelector('[data-open-code]');
-  if (openCode) {
-    openCode.addEventListener('click', () => {
-      const details = document.querySelector('.code-panel details');
-      if (details) {
-        details.open = true;
-      }
-    });
-  }
+  /* ---------- code sheet (native <dialog>) ---------- */
+  const codeDialog = document.getElementById('codeDialog');
+  document.querySelectorAll('[data-open-code]').forEach((button) => {
+    button.addEventListener('click', () => codeDialog.showModal());
+  });
+  codeDialog.addEventListener('click', (event) => {
+    if (
+      event.target === codeDialog ||
+      event.target.closest('[data-close-code]')
+    ) {
+      codeDialog.close();
+    }
+  });
 
   /* ---------- footer year ---------- */
   document.getElementById('year').textContent = new Date().getFullYear();
