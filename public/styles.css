@@ -563,8 +563,9 @@ main {
 }
 
 .poster svg {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
+  color: #7fd1c7;
 }
 
 .poster img {
@@ -997,8 +998,8 @@ body:has(.sheet[open]) {
   }
 
   .poster svg {
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
   }
 
   .card h2 {
