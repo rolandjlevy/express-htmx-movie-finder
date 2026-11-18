@@ -717,7 +717,7 @@ details[open] > summary .chev {
 
 /* ---------- code panel ---------- */
 .code-panel {
-  margin-top: 40px;
+  margin-bottom: 28px;
   padding: 4px 16px 16px;
   background: var(--surface);
   border-radius: 16px;
