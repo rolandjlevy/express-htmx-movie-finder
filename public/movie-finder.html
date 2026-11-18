@@ -126,6 +126,98 @@
               ready-made HTML and the page updates without reloading.
             </p>
 
+            <section class="code-panel" aria-labelledby="codeTitle">
+              <details>
+                <summary>
+                  <h2 id="codeTitle">See the code</h2>
+                  <svg
+                    class="chev"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m6 9 6 6 6-6"></path>
+                  </svg>
+                </summary>
+                <p class="code-intro">
+                  The form sends a GET request to /search as you type. Express
+                  asks OMDb and returns HTML, and HTMX swaps it into the results
+                  area. A few lines of script keep the address bar in sync, so a
+                  search can be shared.
+                </p>
+
+                <div class="code-block">
+                  <div class="code-head">
+                    <h3>Markup (trimmed)</h3>
+                    <button
+                      type="button"
+                      class="copy-btn"
+                      data-copy="codeMarkup"
+                      aria-label="Copy markup"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                  <pre
+                    class="code"
+                    id="codeMarkup"
+                    tabindex="0"
+                    aria-label="Example form markup"
+                  ><code><span class="p">&lt;</span><span class="t">form</span>
+  <span class="t">hx-get</span>=<span class="s">"/search"</span>
+  <span class="t">hx-trigger</span>=<span class="s">"input delay:500ms,</span>
+<span class="s">    search, submit"</span>
+  <span class="t">hx-sync</span>=<span class="s">"this:replace"</span>
+  <span class="t">hx-target</span>=<span class="s">"#result"</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="t">input</span> <span class="t">type</span>=<span class="s">"search"</span>
+    <span class="t">name</span>=<span class="s">"q"</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="t">form</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="t">div</span> <span class="t">id</span>=<span class="s">"result"</span><span class="p">&gt;&lt;/</span><span class="t">div</span><span class="p">&gt;</span></code></pre>
+                </div>
+
+                <div class="code-block">
+                  <div class="code-head">
+                    <h3>Server (simplified)</h3>
+                    <button
+                      type="button"
+                      class="copy-btn"
+                      data-copy="codeServer"
+                      aria-label="Copy server code"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                  <pre
+                    class="code"
+                    id="codeServer"
+                    tabindex="0"
+                    aria-label="Example Express route handler"
+                  ><code><span class="c">// index.js (simplified)</span>
+app.<span class="f">get</span>(<span class="s">'/search'</span>, handler);
+
+<span class="k">async function</span> <span class="f">handler</span>(req, res) {
+  <span class="k">const</span> { q } = req.query;
+  <span class="k">const</span> films = <span class="k">await</span> <span class="f">search</span>(q);
+  res.<span class="f">send</span>(films.<span class="f">map</span>(card).<span class="f">join</span>(<span class="s">''</span>));
+}</code></pre>
+                </div>
+
+                <a
+                  class="code-link"
+                  href="https://github.com/rolandjlevy/express-htmx-movie-finder/blob/HEAD/index.js"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >See the real handler on GitHub<span class="sr-only">
+                    (opens in a new tab)</span
+                  ></a
+                >
+              </details>
+            </section>
+
             <form
               id="searchForm"
               class="search"
@@ -274,98 +366,6 @@
     </header>
 
     <main class="wrap">
-      <section class="code-panel" aria-labelledby="codeTitle">
-        <details>
-          <summary>
-            <h2 id="codeTitle">See the code</h2>
-            <svg
-              class="chev"
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="m6 9 6 6 6-6"></path>
-            </svg>
-          </summary>
-          <p class="code-intro">
-            The form sends a GET request to /search as you type. Express asks
-            OMDb and returns HTML, and HTMX swaps it into the results area. A
-            few lines of script keep the address bar in sync, so a search can be
-            shared.
-          </p>
-
-          <div class="code-block">
-            <div class="code-head">
-              <h3>Markup (trimmed)</h3>
-              <button
-                type="button"
-                class="copy-btn"
-                data-copy="codeMarkup"
-                aria-label="Copy markup"
-              >
-                Copy
-              </button>
-            </div>
-            <pre
-              class="code"
-              id="codeMarkup"
-              tabindex="0"
-              aria-label="Example form markup"
-            ><code><span class="p">&lt;</span><span class="t">form</span>
-  <span class="t">hx-get</span>=<span class="s">"/search"</span>
-  <span class="t">hx-trigger</span>=<span class="s">"input delay:500ms,</span>
-<span class="s">    search, submit"</span>
-  <span class="t">hx-sync</span>=<span class="s">"this:replace"</span>
-  <span class="t">hx-target</span>=<span class="s">"#result"</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="t">input</span> <span class="t">type</span>=<span class="s">"search"</span>
-    <span class="t">name</span>=<span class="s">"q"</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="t">form</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="t">div</span> <span class="t">id</span>=<span class="s">"result"</span><span class="p">&gt;&lt;/</span><span class="t">div</span><span class="p">&gt;</span></code></pre>
-          </div>
-
-          <div class="code-block">
-            <div class="code-head">
-              <h3>Server (simplified)</h3>
-              <button
-                type="button"
-                class="copy-btn"
-                data-copy="codeServer"
-                aria-label="Copy server code"
-              >
-                Copy
-              </button>
-            </div>
-            <pre
-              class="code"
-              id="codeServer"
-              tabindex="0"
-              aria-label="Example Express route handler"
-            ><code><span class="c">// index.js (simplified)</span>
-app.<span class="f">get</span>(<span class="s">'/search'</span>, handler);
-
-<span class="k">async function</span> <span class="f">handler</span>(req, res) {
-  <span class="k">const</span> { q } = req.query;
-  <span class="k">const</span> films = <span class="k">await</span> <span class="f">search</span>(q);
-  res.<span class="f">send</span>(films.<span class="f">map</span>(card).<span class="f">join</span>(<span class="s">''</span>));
-}</code></pre>
-          </div>
-
-          <a
-            class="code-link"
-            href="https://github.com/rolandjlevy/express-htmx-movie-finder/blob/HEAD/index.js"
-            target="_blank"
-            rel="noopener noreferrer"
-            >See the real handler on GitHub<span class="sr-only">
-              (opens in a new tab)</span
-            ></a
-          >
-        </details>
-      </section>
-
       <p id="status" class="status" role="status"></p>
       <div id="result"></div>
     </main>
