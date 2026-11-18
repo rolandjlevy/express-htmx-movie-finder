@@ -65,13 +65,13 @@
   const result = document.getElementById('result');
   const status = document.getElementById('status');
   const themeToggle = document.getElementById('themeToggle');
-  const reqlog = document.getElementById('reqlog');
+  const flowType = document.getElementById('flowType');
+  const flowServer = document.getElementById('flowServer');
+  const flowSwap = document.getElementById('flowSwap');
+  const flowQ = document.getElementById('flowQ');
   const reqPath = document.getElementById('reqPath');
   const reqStatus = document.getElementById('reqStatus');
   const reqSize = document.getElementById('reqSize');
-  const reqMeter = document.getElementById('reqMeter');
-  const reqPreview = document.getElementById('reqPreview');
-  const reqPreviewLabel = document.getElementById('reqPreviewLabel');
 
   /* ---------- theme ---------- */
   const applyTheme = (dark) => {
@@ -147,6 +147,13 @@
   /* ---------- live request log ---------- */
   let startedAt = 0;
 
+  const setStep = (el, state) => {
+    el.classList.remove('is-active', 'is-done');
+    if (state) {
+      el.classList.add(state);
+    }
+  };
+
   const formatBytes = (bytes) =>
     bytes < 1024 ? `${bytes} B` : `${(bytes / 1024).toFixed(1)} KB`;
 
@@ -155,9 +162,15 @@
       return;
     }
     startedAt = performance.now();
+    flowQ.textContent = `q=${input.value.trim()}`;
     reqPath.textContent = decodeURIComponent(
       event.detail.pathInfo.finalRequestPath
     );
+    reqStatus.textContent = 'waiting for the server…';
+    reqSize.textContent = 'response into #result';
+    setStep(flowType, 'is-done');
+    setStep(flowServer, 'is-active');
+    setStep(flowSwap, '');
   });
 
   document.body.addEventListener('htmx:afterRequest', (event) => {
@@ -168,31 +181,17 @@
     const ms = Math.round(performance.now() - startedAt);
 
     if (!xhr || xhr.status === 0) {
-      reqStatus.innerHTML = '<span class="muted">No response</span>';
-      reqSize.textContent = '';
+      reqStatus.textContent = 'no response';
+      setStep(flowServer, '');
       return;
     }
 
     const films = (xhr.responseText.match(/class="card"/g) || []).length;
     const bytes = new Blob([xhr.responseText]).size;
     reqStatus.textContent = `${xhr.status} ${successful ? 'OK' : 'Error'} · ${ms} ms`;
-    reqSize.textContent = `${films === 1 ? '1 film' : `${films} films`} · ${formatBytes(bytes)} of HTML`;
-
-    // Show the real start of the HTML the server sent (textContent keeps it inert).
-    const firstCard = xhr.responseText.match(
-      /<article class="card">[\s\S]*?<h2>[\s\S]*?<\/h2>/
-    );
-    reqPreview.textContent = (firstCard ? firstCard[0] : xhr.responseText)
-      .trim()
-      .replace(/\n\s*\n/g, '\n')
-      .replace(/^ {2,}/gm, '  ')
-      .slice(0, 260);
-    reqPreviewLabel.textContent = 'Response (start of the HTML)';
-    reqMeter.style.width = `${Math.min(100, Math.max(8, 100 - ms / 20))}%`;
-
-    reqlog.classList.remove('flash');
-    void reqlog.offsetWidth; // restart the animation
-    reqlog.classList.add('flash');
+    reqSize.textContent = `${films === 1 ? '1 film' : `${films} films`} · ${formatBytes(bytes)} into #result`;
+    setStep(flowServer, 'is-done');
+    setStep(flowSwap, 'is-done');
 
     // Keep the address bar shareable without filling the history.
     const query = input.value.trim();
@@ -211,6 +210,17 @@
       htmx.trigger(form, 'submit');
     }
   });
+
+  /* ---------- "Code" link opens the code panel ---------- */
+  const openCode = document.querySelector('[data-open-code]');
+  if (openCode) {
+    openCode.addEventListener('click', () => {
+      const details = document.querySelector('.code-panel details');
+      if (details) {
+        details.open = true;
+      }
+    });
+  }
 
   /* ---------- footer year ---------- */
   document.getElementById('year').textContent = new Date().getFullYear();

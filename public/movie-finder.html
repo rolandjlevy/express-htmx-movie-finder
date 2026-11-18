@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link
@@ -64,57 +64,66 @@
             </svg>
             Rapid HTMX Search
           </p>
-          <button
-            type="button"
-            id="themeToggle"
-            class="icon-btn on-band"
-            aria-label="Switch to dark theme"
-          >
-            <svg
-              class="icon-sun"
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+          <nav class="topnav" aria-label="Project">
+            <a class="toplink" href="#codeTitle" data-open-code>Code</a>
+            <a
+              class="toplink"
+              href="https://github.com/rolandjlevy/express-htmx-movie-finder"
+              target="_blank"
+              rel="noopener noreferrer"
+              >GitHub<span class="sr-only"> (opens in a new tab)</span></a
             >
-              <circle cx="12" cy="12" r="4"></circle>
-              <path d="M12 2v2"></path>
-              <path d="M12 20v2"></path>
-              <path d="m4.93 4.93 1.41 1.41"></path>
-              <path d="m17.66 17.66 1.41 1.41"></path>
-              <path d="M2 12h2"></path>
-              <path d="M20 12h2"></path>
-              <path d="m6.34 17.66-1.41 1.41"></path>
-              <path d="m19.07 4.93-1.41 1.41"></path>
-            </svg>
-            <svg
-              class="icon-moon"
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+            <button
+              type="button"
+              id="themeToggle"
+              class="icon-btn"
+              aria-label="Switch to dark theme"
             >
-              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-            </svg>
-          </button>
+              <svg
+                class="icon-sun"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2"></path>
+                <path d="M12 20v2"></path>
+                <path d="m4.93 4.93 1.41 1.41"></path>
+                <path d="m17.66 17.66 1.41 1.41"></path>
+                <path d="M2 12h2"></path>
+                <path d="M20 12h2"></path>
+                <path d="m6.34 17.66-1.41 1.41"></path>
+                <path d="m19.07 4.93-1.41 1.41"></path>
+              </svg>
+              <svg
+                class="icon-moon"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+              </svg>
+            </button>
+          </nav>
         </div>
 
         <div class="hero">
           <div class="hero-main">
-            <p class="eyebrow">HTMX · Express · OMDb</p>
             <h1>
-              <span class="h1-line">Search films.</span>
-              <span class="h1-line accent">Watch HTML arrive.</span>
+              <span class="h1-line">Search films</span>
+              <span class="h1-line accent">as you type.</span>
             </h1>
             <p class="lede">
-              Type a title. The server sends back finished HTML and HTMX drops
-              it into the page: no framework, no page reload.
+              Every keystroke asks the server for results. It replies with
+              ready-made HTML and the page updates without reloading.
             </p>
 
             <form
@@ -215,30 +224,22 @@
               <span class="try-label" id="tryLabel">Try</span>
               <ul class="try-list" aria-labelledby="tryLabel">
                 <li>
-                  <button
-                    type="button"
-                    class="chip-btn on-band"
-                    data-q="Vertigo"
-                  >
+                  <button type="button" class="chip-btn" data-q="Vertigo">
                     Vertigo
                   </button>
                 </li>
                 <li>
-                  <button type="button" class="chip-btn on-band" data-q="Alien">
+                  <button type="button" class="chip-btn" data-q="Alien">
                     Alien
                   </button>
                 </li>
                 <li>
-                  <button
-                    type="button"
-                    class="chip-btn on-band"
-                    data-q="Casablanca"
-                  >
+                  <button type="button" class="chip-btn" data-q="Casablanca">
                     Casablanca
                   </button>
                 </li>
                 <li>
-                  <button type="button" class="chip-btn on-band" data-q="Jaws">
+                  <button type="button" class="chip-btn" data-q="Jaws">
                     Jaws
                   </button>
                 </li>
@@ -246,38 +247,28 @@
             </div>
           </div>
 
-          <aside class="reqlog" id="reqlog" aria-labelledby="reqlogTitle">
-            <div class="reqlog-bar">
-              <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
-              <h2 id="reqlogTitle">Last request</h2>
-            </div>
-            <div class="reqlog-body">
-              <p class="reqlog-line">
-                <span class="verb">GET</span>
-                <span id="reqPath">/search?q=…</span>
-              </p>
-              <p class="reqlog-line" id="reqStatus">
-                <span class="muted">Waiting for your first search</span>
-              </p>
-              <p class="reqlog-line" id="reqSize"></p>
-              <div class="reqlog-bar-track" aria-hidden="true">
-                <span id="reqMeter"></span>
-              </div>
-              <p class="reqlog-label" id="reqPreviewLabel">Example response</p>
-              <pre
-                class="reqlog-preview"
-                id="reqPreview"
-                aria-labelledby="reqPreviewLabel"
-              ><code>&lt;article class="card"&gt;
-  &lt;h2&gt;Vertigo&lt;/h2&gt;
-  &lt;p&gt;1958 · 128 min · 8.3&lt;/p&gt;
-  …
-&lt;/article&gt;</code></pre>
-              <p class="reqlog-note">
-                HTMX swaps the response into <code>#result</code>.
-              </p>
-            </div>
-          </aside>
+          <ol
+            class="flow"
+            id="reqlog"
+            aria-label="What happens when you search"
+          >
+            <li id="flowType">
+              <h2>1 · You type</h2>
+              <code id="flowQ">q=</code>
+            </li>
+            <li id="flowServer">
+              <h2>2 · Server replies</h2>
+              <code
+                ><span id="reqPath">GET /search</span><br /><span id="reqStatus"
+                  >waiting for a search</span
+                ></code
+              >
+            </li>
+            <li id="flowSwap">
+              <h2>3 · HTMX swaps</h2>
+              <code id="reqSize">response into #result</code>
+            </li>
+          </ol>
         </div>
       </div>
     </header>
